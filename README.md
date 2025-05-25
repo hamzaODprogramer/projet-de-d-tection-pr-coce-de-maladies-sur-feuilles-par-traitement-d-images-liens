@@ -1,6 +1,6 @@
 # Guide du Projet - Détection Précoce des Maladies des Feuilles
 
-## 1. Guide d'utilisation
+## 1. Guide d'utilisation de l'application Web
 
 ### 1.1 Installation des bibliothèques nécessaires
 Avant de démarrer l'application, il est indispensable d'installer les dépendances listées dans le fichier `requirements.txt` :
@@ -9,7 +9,7 @@ Avant de démarrer l'application, il est indispensable d'installer les dépendan
 pip install -r requirements.txt
 ```
 
-### 1.2 Exécution de l'application
+### 1.2 Exécution de l'application Web
 L'application peut ensuite être lancée à l'aide des commandes suivantes :
 
 ```bash
