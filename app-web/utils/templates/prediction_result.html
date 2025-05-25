@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultat de prédiction - PlantHealth</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="results-section">
+        <h2><i class="fas fa-leaf"></i> Résultat de l'analyse de santé</h2>
+
+        <div class="prediction-result {% if 'malade' in prediction %}result-danger{% else %}result-success{% endif %}">
+            <div class="result-icon">
+                {% if "malade" in prediction %}
+                <i class="fas fa-exclamation-circle"></i>
+                {% else %}
+                <i class="fas fa-check-circle"></i>
+                {% endif %}
+            </div>
+            <h3>{{ prediction }}</h3>
+        </div>
+
+        <div class="result-image">
+            <img src="{{ url_for('static', filename=image) }}" alt="Image analysée">
+        </div>
+
+        <div class="action-buttons">
+            <a href="{{ url_for('predict_view') }}" class="btn secondary-btn">
+                <i class="fas fa-arrow-left"></i> Nouvelle prédiction
+            </a>
+            <a href="{{ url_for('index_view') }}" class="btn outline-btn">
+                <i class="fas fa-home"></i> Retour à l'accueil
+            </a>
+        </div>
+    </div>
+</body>
+</html>

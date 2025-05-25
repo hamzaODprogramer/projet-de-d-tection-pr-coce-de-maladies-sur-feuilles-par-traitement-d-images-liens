@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prédiction - PlantHealth</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">PlantHealth</div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('index_view') }}">Accueil</a></li>
+            <li><a href="{{ url_for('image_view') }}">Analyse d'image</a></li>
+            <li><a href="{{ url_for('predict_view') }}" class="active">Prédiction</a></li>
+        </ul>
+    </nav>
+
+    <div class="page-content">
+        <div class="page-header">
+            <h1>Prédiction de l'état de santé</h1>
+            <p>Découvrez si votre plante est en bonne santé ou malade</p>
+        </div>
+
+        <div class="upload-container">
+            <form id="uploadForm" enctype="multipart/form-data">
+                <div class="file-upload-wrapper">
+                    <div class="file-upload-area" id="dropArea">
+                        <i class="fas fa-leaf"></i>
+                        <p>Glissez votre image de feuille ici ou</p>
+                        <label for="image" class="file-upload-btn">Choisir une image</label>
+                        <input type="file" id="image" name="image" accept="image/*" required>
+                        <div id="preview-container" class="hidden">
+                            <img id="imagePreview" src="#" alt="Aperçu">
+                            <p id="fileName"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn primary-btn"><i class="fas fa-stethoscope"></i> Analyser l'état de santé</button>
+            </form>
+        </div>
+
+        <div id="loading" class="loading-container hidden">
+            <div class="loader"></div>
+            <p>Analyse en cours...</p>
+        </div>
+
+        <div id="results" class="results-container hidden">
+            <!-- Les résultats seront chargés ici via AJAX -->
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 PlantHealth - Solution d'analyse des maladies des plantes</p>
+    </footer>
+
+    <script>
+        // Preview de l'image
+        document.getElementById('image').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('imagePreview').src = event.target.result;
+                    document.getElementById('fileName').textContent = file.name;
+                    document.getElementById('preview-container').classList.remove('hidden');
+                    document.getElementById('dropArea').classList.add('has-file');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Soumission du formulaire via AJAX
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('results').classList.add('hidden');
+            
+            fetch('/prediction', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('results').innerHTML = html;
+                document.getElementById('results').classList.remove('hidden');
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                document.getElementById('loading').classList.add('hidden');
+                alert('Une erreur est survenue lors de l\'analyse.');
+            });
+        });
+
+        // Drag and drop
+        const dropArea = document.getElementById('dropArea');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            dropArea.classList.add('highlight');
+        }
+        
+        function unhighlight() {
+            dropArea.classList.remove('highlight');
+        }
+        
+        dropArea.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length) {
+                document.getElementById('image').files = files;
+                const event = new Event('change');
+                document.getElementById('image').dispatchEvent(event);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlantHealth - Analyse des maladies des plantes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Styles supplémentaires pour le guide d'utilisation */
+        .guide-section {
+            padding: 4rem 2rem;
+            background-color: #ffffff;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .section-header p {
+            max-width: 800px;
+            margin: 0 auto;
+            color: #666;
+        }
+        
+        .guide-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .step-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            flex: 1;
+            min-width: 280px;
+            max-width: 350px;
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+        
+        .step-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .step-card h3 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .step-card p {
+            color: #666;
+        }
+        
+        .tips-container {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin: 3rem auto 0;
+            max-width: 800px;
+        }
+        
+        .tips-container h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .tips-container ul {
+            list-style-type: none;
+        }
+        
+        .tips-container li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .tips-container li:before {
+            content: "\f105";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+        }
+        
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.8s ease-in-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Styles pour le footer */
+        footer {
+            background-color: #040404;
+            color: #fffefe;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: auto; /* Pour le pousser en bas si besoin */
+            width: 100%;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        /* Assurer que le contenu principal prend tout l'espace disponible */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        /* Conteneur principal qui va grandir pour pousser le footer en bas */
+        .main-content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="hero-section">
+            <nav class="navbar">
+                <div class="logo">PlantHealth</div>
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('index_view') }}" class="active">Accueil</a></li>
+                    <li><a href="{{ url_for('image_view') }}">Analyse d'image</a></li>
+                    <li><a href="{{ url_for('predict_view') }}">Prédiction</a></li>
+                </ul>
+            </nav>
+            
+            <div class="hero-content">
+                <h1>Bienvenue dans notre application</h1>
+                <p>Une solution facile pour détecter les maladies des feuilles et prédire leur état de santé</p>
+                <div class="cta-buttons">
+                    <a href="{{ url_for('image_view') }}" class="btn primary-btn">
+                        <i class="fas fa-search"></i> Détecter des zones
+                    </a>
+                    <a href="{{ url_for('predict_view') }}" class="btn secondary-btn">
+                        <i class="fas fa-leaf"></i> Prédire l'état de santé
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="features-section">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h3>Détection des zones non végétales</h3>
+                <p>Identifiez précisément les zones non végétales dans vos images de plantes pour un meilleur diagnostic.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bug"></i>
+                </div>
+                <h3>Détection des zones malades</h3>
+                <p>Localisez automatiquement les zones potentiellement infectées sur les feuilles de vos plantes.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Prédiction de l'état de santé</h3>
+                <p>Obtenez un diagnostic rapide sur l'état de santé de vos plantes grâce à notre algorithme d'analyse.</p>
+            </div>
+        </div>
+        
+        <!-- Guide d'utilisation -->
+        <div class="guide-section">
+            <div class="section-header scroll-animate">
+                <h2>Guide d'utilisation</h2>
+                <p>Suivez ces étapes simples pour tirer le meilleur parti de notre application d'analyse des plantes</p>
+            </div>
+            
+            <div class="guide-steps">
+                <div class="step-card scroll-animate">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">
+                        <i class="fas fa-upload"></i>
+                    </div>
+                    <h3>Téléchargez l'image</h3>
+                    <p>Accédez à la page d'analyse d'image ou de prédiction et téléchargez votre photo en cliquant sur la zone de dépôt ou en sélectionnant un fichier.</p>
+                </div>
+                
+                <div class="step-card scroll-animate">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Lancez l'analyse</h3>
+                    <p>Sélectionnez le type d'analyse souhaité et cliquez sur le bouton d'analyse. Attendez quelques instants pendant que notre algorithme traite votre image.</p>
+                </div>
+                
+                <div class="step-card scroll-animate">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3>Consultez les résultats</h3>
+                    <p>Examinez les résultats détaillés de l'analyse, incluant les zones identifiées ou le diagnostic de santé .</p>
+                </div>
+            </div>
+        </div>
+    </div> <!-- Fin du main-content -->
+
+    <footer>
+        <p>&copy; 2025 PlantHealth - Solution d'analyse des maladies des plantes</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
