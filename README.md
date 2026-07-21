@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="./app-mobile/assets/images/icon.png" alt="" align="center" height="80" />
-
 # Détection Précoce des Maladies sur Feuilles
 
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
@@ -17,16 +15,16 @@ Système de détection précoce des maladies foliaires combinant un modèle SVM 
 
 ```
 ┌──────────────────────┐     ┌──────────────────┐     ┌──────────────────────┐
-│  React Native (Expo) │────▶│   Flask Backend  │────▶│   SVM Model (.pkl)   │
-│  - Scanner/Galerie   │◀────│   /prediction_app│     │   HOG + PCA + Scaler │
+│  React Native (Expo) │───▶│   Flask Backend  │────▶│   SVM Model (.pkl)   │
+│  - Scanner/Galerie   │◀───│   /prediction_app│     │   HOG + PCA + Scaler │
 │  - Analyse Gemini    │     │   /detect        │     └──────────────────────┘
 │  - Historique SQLite │     │   /prediction    │
 └──────────────────────┘     └──────────────────┘
                                      │
-                            ┌────────┴────────┐
-                            │  Gemini API      │
-                            │  (recommandations)│
-                            └─────────────────┘
+                            ┌────────┴───────────┐
+                            │  Gemini API        │
+                            │  (recommandations) │
+                            └────────────────────┘
 ```
 
 - **Application mobile** (React Native / Expo) — capture d'images via caméra ou galerie, analyse via l'API Gemini (nom de la maladie, confiance, description, recommandations), historique local dans SQLite
